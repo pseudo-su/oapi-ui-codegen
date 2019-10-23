@@ -1,0 +1,44 @@
+// data{{.Code}} is a Base64 encoded, gzipped, json marshaled html template
+var data{{.Code}} = []string{
+{{range .Parts}}
+    "{{.}}",{{end}}
+}
+
+// Get{{.Code}} returns the {{.Description}}.
+func Get{{.Code}}(specURL string, redirectURL string) ([]byte, error) {
+	zipped, err := base64.StdEncoding.DecodeString(strings.Join(data{{.Code}}, ""))
+	if err != nil {
+		return nil, fmt.Errorf("error base64 decoding data{{.Code}}: %s", err)
+	}
+	zr, err := gzip.NewReader(bytes.NewReader(zipped))
+	if err != nil {
+		return nil, fmt.Errorf("error decompressing: %s", err)
+	}
+	var buf bytes.Buffer
+	_, err = buf.ReadFrom(zr)
+	if err != nil {
+		return nil, fmt.Errorf("error decompressing spec: %s", err)
+	}
+	s := buf.String()
+	// idx := strings.Index(s, "<!DOCTYPE html>")
+
+	tmpl, err := template.
+		New("oapi-ui-codegen {{.Code}}").
+		Delims("__LEFT_DELIM__", "__RIGHT_DELIM__").
+		Parse(s)
+
+	if err != nil {
+		return nil, fmt.Errorf("error loading {{.Code}} template: %s", err)
+	}
+	buf.Reset()
+	data := struct {
+		SpecURL string
+		SwaggerUIRedirectURL string
+	} {
+		SpecURL: specURL,
+		SwaggerUIRedirectURL: redirectURL,
+	}
+	
+	tmpl.Execute(&buf, data)
+	return buf.Bytes(), nil
+}
