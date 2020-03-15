@@ -16,7 +16,7 @@ We're going to use the OpenAPI example of the
 [Expanded Petstore](https://github.com/OAI/OpenAPI-Specification/blob/master/examples/v3.0/petstore-expanded.yaml)
 in the descriptions below, please have a look at it.
 
-## Using `oapi-codegen`
+## Using `oapi-ui-codegen`
 
 The default options for `oapi-ui-codegen` will generate the swagger spec and swagger-ui
 files, but you can generate subsets of those via the `-generate` flag. It defaults to `spec,swaggerui`.
