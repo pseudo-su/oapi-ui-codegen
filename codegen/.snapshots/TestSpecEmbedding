@@ -30,7 +30,7 @@ var swaggerSpec = []string{
 
 // GetOpenAPISpec returns the Swagger specification corresponding to the generated code
 // in this file.
-func GetOpenAPISpec() (*openapi3.Swagger, error) {
+func GetOpenAPISpec() (*openapi3.T, error) {
 	zipped, err := base64.StdEncoding.DecodeString(strings.Join(swaggerSpec, ""))
 	if err != nil {
 		return nil, fmt.Errorf("error base64 decoding spec: %s", err)
@@ -45,7 +45,7 @@ func GetOpenAPISpec() (*openapi3.Swagger, error) {
 		return nil, fmt.Errorf("error decompressing spec: %s", err)
 	}
 
-	swagger, err := openapi3.NewSwaggerLoader().LoadSwaggerFromData(buf.Bytes())
+	swagger, err := openapi3.NewLoader().LoadFromData(buf.Bytes())
 	if err != nil {
 		return nil, fmt.Errorf("error loading Swagger: %s", err)
 	}

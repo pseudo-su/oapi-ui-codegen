@@ -20,7 +20,7 @@ func TestSpecEmbedding(t *testing.T) {
 	}
 
 	// Get a spec from the test definition in this file:
-	swagger, err := openapi3.NewSwaggerLoader().LoadSwaggerFromData([]byte(testOpenAPIDefinition))
+	swagger, err := openapi3.NewLoader().LoadFromData([]byte(testOpenAPIDefinition))
 	assert.NoError(t, err)
 
 	// Run our code generation:
@@ -35,7 +35,7 @@ func TestSpecEmbedding(t *testing.T) {
 	// Check that we have a package:
 	assert.Contains(t, code, "package testswagger")
 
-	assert.Contains(t, code, "func GetOpenAPISpec() (*openapi3.Swagger, error) {")
+	assert.Contains(t, code, "func GetOpenAPISpec() (*openapi3.T, error) {")
 
 	// Write snapshot
 	cupaloy.SnapshotT(t, code)
@@ -56,7 +56,7 @@ func TestSwaggerUIEmbedding(t *testing.T) {
 	}
 
 	// Get a spec from the test definition in this file:
-	swagger, err := openapi3.NewSwaggerLoader().LoadSwaggerFromData([]byte(testOpenAPIDefinition))
+	swagger, err := openapi3.NewLoader().LoadFromData([]byte(testOpenAPIDefinition))
 	assert.NoError(t, err)
 
 	// Run our code generation:

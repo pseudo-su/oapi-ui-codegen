@@ -23,14 +23,14 @@ import (
 
 	htmlTemplate "html/template"
 
-	htmlTemplates "github.com/pseudo-su/oapi-ui-codegen/codegen/html"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/pkg/errors"
+	htmlTemplates "github.com/pseudo-su/oapi-ui-codegen/codegen/html"
 )
 
 // GenerateInlinedSpec generates a gzipped, base64 encoded JSON representation of the
 // swagger definition, which we embed inside the generated code.
-func GenerateInlinedSpec(t *template.Template, swagger *openapi3.Swagger) (string, error) {
+func GenerateInlinedSpec(t *template.Template, swagger *openapi3.T) (string, error) {
 	// Marshal to json
 	encoded, err := swagger.MarshalJSON()
 	if err != nil {
@@ -149,12 +149,12 @@ func generateInlinedPage(t *template.Template, code, filename, description strin
 	w = bufio.NewWriter(&buf)
 
 	data := struct {
-		Parts []string
-		Code  string
+		Parts       []string
+		Code        string
 		Description string
 	}{
-		Parts: parts,
-		Code:  code,
+		Parts:       parts,
+		Code:        code,
 		Description: description,
 	}
 	err = t.ExecuteTemplate(w, "inline-ui.tmpl", data)
